@@ -1,7 +1,6 @@
 import csv
 
-print("Izračun osnovnih metod odločanja.")
-
+print("Izračun osnovnih metod odločanja.\n")
 
 def Pesimist(dict):
     largest_value = float('-inf')
@@ -34,7 +33,7 @@ def Laplas(dict):
     return f"{largest_key} ({int(largest_average)})"
 
 
-def Savage(dict,header):
+def Savage(dict, header):
 
     v1 = float('-inf') #najslabsi izid najvecji
     v2 = float('-inf') #najboljsi izid najvecji
@@ -55,12 +54,14 @@ def Savage(dict,header):
 
     najvecji = []
     for key, value in novDict.items():
-        najvecji.append(max(value[0],value[1]))
-    dictKoncni = {header[i]: [int(najvecji[i])] for i in range(len(header))}
+        najvecji.append(max(value[0],value[1]))  #v list appendas najvecje value od obeh
+        
+        
+    dictFinal = {header[i]: [int(najvecji[i])] for i in range(len(header))} #najvecje rezultate zapises v nov dictionary
 
     obzalovanje = float('inf')
     kljuc = None
-    for key, value in dictKoncni.items():
+    for key, value in dictFinal.items():  #dobis kljuc in vrednost obzalovanja
         if value[0] < obzalovanje:
            obzalovanje = value[0]
            kljuc = key
@@ -69,7 +70,7 @@ def Savage(dict,header):
 
 file = open("prodaja.csv")
 csvreader = csv.reader(file)
-print(f"Prebrana je bila datoteka {file.name}")
+print(f"Prebrana je bila datoteka {file.name}\n")
 data = []
 for i,row in enumerate(csvreader):
     if i >= 3:
@@ -85,10 +86,14 @@ dict = {header[i]: [int(alternativa1[i]), int(alternativa2[i])] for i in range(l
 optimist = Optimist(dict)
 pesimist = Pesimist(dict)
 laplas = Laplas(dict)
-savage = Savage(dict,header)
+savage = Savage(dict, header)
 print(f"Optimist:       {optimist}")
-print(f"Pesimist:        {pesimist}")
-print(f"Laplace:           {laplas}")
-print(f"Savage:             {savage}")
+print(f"Pesimist:       {pesimist}")
+print(f"Laplace:        {laplas}")
+print(f"Savage:         {savage}")
+
+
+print("\nHurwitzev kriterij:")
+print("\n")
 
 file.close()
