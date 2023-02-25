@@ -10,8 +10,7 @@ def Pesimist(dict):
         if value[0] > largest_value:
             largest_value = value[0]
             largest_key = key
-    key_and_value = f"{largest_key} ({largest_value})"
-    return key_and_value
+    return f"{largest_key} ({largest_value})"
 
 
 def Optimist(dict):
@@ -21,8 +20,7 @@ def Optimist(dict):
         if value[1] > largest_value:
             largest_value = value[1]
             largest_key = key
-    key_and_value = f"{largest_key} ({largest_value})"
-    return key_and_value
+    return f"{largest_key} ({largest_value})"
 
 
 def Laplas(dict):
@@ -36,8 +34,37 @@ def Laplas(dict):
     return f"{largest_key} ({int(largest_average)})"
 
 
-def Savage(dict):
-    return 0
+def Savage(dict,header):
+
+    v1 = float('-inf') #najslabsi izid najvecji
+    v2 = float('-inf') #najboljsi izid najvecji
+
+    for key, value in dict.items():
+        if value[0] > v1:
+            v1 = value[0]  #dobis najvecji value iz prve
+    for key, value in dict.items():
+        if value[1] > v2:
+            v2 = value[1]  #dobis najvecji value iz druge
+
+    data = [[],[]]  #2D list
+    for key, value in dict.items():
+        data[0].append(v1-value[0]) #appendas stevila odstete od najvecjega
+        data[1].append(v2-value[1]) #appendas stevila odstete od najvecjega
+
+    novDict = {header[i]: [int(data[0][i]), int(data[1][i])] for i in range(len(header))} #vse podatke vneses v nov dictionary
+
+    najvecji = []
+    for key, value in novDict.items():
+        najvecji.append(max(value[0],value[1]))
+    dictKoncni = {header[i]: [int(najvecji[i])] for i in range(len(header))}
+
+    obzalovanje = float('inf')
+    kljuc = None
+    for key, value in dictKoncni.items():
+        if value[0] < obzalovanje:
+           obzalovanje = value[0]
+           kljuc = key
+    return f"{kljuc} ({obzalovanje})"
 
 
 file = open("prodaja.csv")
@@ -58,7 +85,7 @@ dict = {header[i]: [int(alternativa1[i]), int(alternativa2[i])] for i in range(l
 optimist = Optimist(dict)
 pesimist = Pesimist(dict)
 laplas = Laplas(dict)
-savage = Savage(dict)
+savage = Savage(dict,header)
 print(f"Optimist:       {optimist}")
 print(f"Pesimist:        {pesimist}")
 print(f"Laplace:           {laplas}")
