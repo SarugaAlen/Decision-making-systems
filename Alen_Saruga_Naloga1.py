@@ -1,4 +1,5 @@
 import csv
+import matplotlib.pyplot as plt
 
 print("Izračun osnovnih metod odločanja.\n")
 
@@ -67,6 +68,25 @@ def Savage(dict, header):
            kljuc = key
     return f"{kljuc} ({obzalovanje})"
 
+def Herwitz(dict):
+    list = []
+    for key, value in dict.items():
+        herwtiz = []
+        for i in range(0, 11):
+            h = i / 10
+            herwtiz.append(round(h * value[0] + (1-h) * value[1], 2))
+        list.append(herwtiz)
+    return list
+
+
+
+
+
+
+
+
+
+
 
 file = open("prodaja.csv")
 csvreader = csv.reader(file)
@@ -96,4 +116,28 @@ print(f"Savage:         {savage}")
 print("\nHurwitzev kriterij:")
 print("\n")
 
+heading = header
+heading.insert(0, "h")
+head = (' '.join(heading))
+
+herwitz = Herwitz(dict)
+for row in herwitz:
+    row.reverse()
+
+print(head)
+for i in range(0, 11):
+    izpis = " "
+    h = i / 10
+    vrsta = " "
+    for row in herwitz:
+         vrsta += str(row[i]) + "\t"
+    izpis = str(h) + "\t" + vrsta
+    print(izpis)
+
+for row in herwitz:
+     plt.plot(row, [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+
+plt.show()
+
+print(f"\nGraf Hurwitzovega kriterija je bil shranjen v datoteko graf.png.")
 file.close()
