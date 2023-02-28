@@ -2,8 +2,6 @@ import csv
 import matplotlib.pyplot as plt
 from prettytable import PrettyTable
 
-print("Izračun osnovnih metod odločanja.\n")
-
 def Pesimist(dict):
     largest_value = float('-inf')
     largest_key = None
@@ -47,23 +45,23 @@ def Savage(dict, header):
         if value[1] > v2:
             v2 = value[1]  #dobis najvecji value iz druge
 
-    data = [[],[]]  #2D list
+    data = [[], []]  #2D list
     for key, value in dict.items():
         data[0].append(v1-value[0]) #appendas stevila odstete od najvecjega
         data[1].append(v2-value[1]) #appendas stevila odstete od najvecjega
 
-    novDict = {header[i]: [int(data[0][i]), int(data[1][i])] for i in range(len(header))} #vse podatke vneses v nov dictionary
+    new_dict = {header[i]: [int(data[0][i]), int(data[1][i])] for i in range(len(header))} #vse podatke vneses v nov dictionary
 
-    najvecji = []
-    for key, value in novDict.items():
-        najvecji.append(max(value[0],value[1]))  #v list appendas najvecje value od obeh
+    max_list = []
+    for key, value in new_dict.items():
+        max_list.append(max(value[0],value[1]))  #v list appendas najvecje value od obeh
         
         
-    dictFinal = {header[i]: [int(najvecji[i])] for i in range(len(header))} #najvecje rezultate zapises v nov dictionary
+    dict_final = {header[i]: [int(max_list[i])] for i in range(len(header))} #najvecje rezultate zapises v nov dictionary
 
     obzalovanje = float('inf')
     kljuc = None
-    for key, value in dictFinal.items():  #dobis kljuc in vrednost obzalovanja
+    for key, value in dict_final.items():  #dobis kljuc in vrednost obzalovanja
         if value[0] < obzalovanje:
            obzalovanje = value[0]
            kljuc = key
@@ -79,11 +77,13 @@ def Herwitz(dict):
         list.append(herwtiz)
     return list
 
+print("Izračun osnovnih metod odločanja.\n")
 
 file = open("prodaja.csv")
 csvreader = csv.reader(file)
 print(f"Prebrana je bila datoteka {file.name}\n")
 data = []
+
 for i,row in enumerate(csvreader):
     if i >= 3:
         break
@@ -108,7 +108,7 @@ print("{:<10} {:>10}".format("Savage: ", savage))
 print("\nHurwitzev kriterij:")
 print("\n")
 
-heading = header
+heading = header.copy()
 heading.insert(0, "h")
 head = (' '.join(heading))
 
@@ -130,11 +130,13 @@ for i in range(0, 11):
 print(table)
 
 for i, row in enumerate(herwitz):
-    plt.plot([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], row, label=head[i])
+    plt.plot([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], row, label=header[i])
 
 plt.legend()
-plt.show()
+plt.ylabel('Vrednost alternativ')
+plt.xlabel('h')
 plt.savefig('./graf.png')
+plt.show()
 
 print(f"\nGraf Hurwitzovega kriterija je bil shranjen v datoteko graf.png.")
 file.close()
