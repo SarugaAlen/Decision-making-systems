@@ -1,5 +1,6 @@
 import csv
 import matplotlib.pyplot as plt
+from prettytable import PrettyTable
 
 print("Izračun osnovnih metod odločanja.\n")
 
@@ -79,15 +80,6 @@ def Herwitz(dict):
     return list
 
 
-
-
-
-
-
-
-
-
-
 file = open("prodaja.csv")
 csvreader = csv.reader(file)
 print(f"Prebrana je bila datoteka {file.name}\n")
@@ -107,11 +99,11 @@ optimist = Optimist(dict)
 pesimist = Pesimist(dict)
 laplas = Laplas(dict)
 savage = Savage(dict, header)
-print(f"Optimist:       {optimist}")
-print(f"Pesimist:       {pesimist}")
-print(f"Laplace:        {laplas}")
-print(f"Savage:         {savage}")
 
+print("{:<10} {:>10}".format("Optimist: ", optimist))
+print("{:<10} {:>10}".format("Pesimist: ", pesimist))
+print("{:<10} {:>10}".format("Laplace: ", laplas))
+print("{:<10} {:>10}".format("Savage: ", savage))
 
 print("\nHurwitzev kriterij:")
 print("\n")
@@ -124,20 +116,25 @@ herwitz = Herwitz(dict)
 for row in herwitz:
     row.reverse()
 
-print(head)
+table = PrettyTable([head])
+table.align[head] = "l"
+
 for i in range(0, 11):
-    izpis = " "
     h = i / 10
-    vrsta = " "
+    vrsta = ""
     for row in herwitz:
-         vrsta += str(row[i]) + "\t"
-    izpis = str(h) + "\t" + vrsta
-    print(izpis)
+        vrsta += "{:<10}".format(str(row[i]))
+    izpis = "{:<5} {}".format(str(h), vrsta)
+    table.add_row([izpis])
 
-for row in herwitz:
-     plt.plot(row, [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+print(table)
 
+for i, row in enumerate(herwitz):
+    plt.plot([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], row, label=head[i])
+
+plt.legend()
 plt.show()
+plt.savefig('./graf.png')
 
 print(f"\nGraf Hurwitzovega kriterija je bil shranjen v datoteko graf.png.")
 file.close()
