@@ -22,7 +22,7 @@ def Optimist(dict):
     return f"{largest_key} ({largest_value})"
 
 
-def Laplas(dict):
+def Laplace(dict):
     largest_average = float('-inf')
     largest_key = None
     for key, value in dict.items():
@@ -68,14 +68,14 @@ def Savage(dict, header):
     return f"{kljuc} ({obzalovanje})"
 
 def Herwitz(dict):
-    list = []
+    temp = []
     for key, value in dict.items():
         herwtiz = []
         for i in range(0, 11):
             h = i / 10
             herwtiz.append(round(h * value[0] + (1-h) * value[1], 2))
-        list.append(herwtiz)
-    return list
+        temp.append(herwtiz)
+    return temp
 
 print("Izračun osnovnih metod odločanja.\n")
 
@@ -97,7 +97,7 @@ dict = {header[i]: [int(alternativa1[i]), int(alternativa2[i])] for i in range(l
 
 optimist = Optimist(dict)
 pesimist = Pesimist(dict)
-laplas = Laplas(dict)
+laplas = Laplace(dict)
 savage = Savage(dict, header)
 
 print("{:<10} {:>10}".format("Optimist: ", optimist))
@@ -135,8 +135,9 @@ for i, row in enumerate(herwitz):
 plt.legend()
 plt.ylabel('Vrednost alternativ')
 plt.xlabel('h')
-plt.savefig('./graf.png')
 plt.show()
+plt.savefig('./graf.png')
 
 print(f"\nGraf Hurwitzovega kriterija je bil shranjen v datoteko graf.png.")
+
 file.close()
